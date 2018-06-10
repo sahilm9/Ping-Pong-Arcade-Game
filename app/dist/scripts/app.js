@@ -92,6 +92,9 @@ var canvas = document.getElementById("myCanvas"),
     computerScore = 0,
     gameOver = false;
 
+window.addEventListener("resize", function () {
+  document.location.reload();
+});
 function randomDirections() {
   Math.random() < 0.5 ? dx = +6 : dx = -6;
   Math.random() < 0.5 ? dy = -6 : dy = +6;
