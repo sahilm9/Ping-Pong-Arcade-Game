@@ -92,5 +92,31 @@ var canvas = document.getElementById("myCanvas"),
     computerScore = 0,
     gameOver = false;
 
+function drawBall() {
+  context.beginPath();
+  context.arc(x, y, ballRadius, 0, Math.PI * 2);
+  context.fillStyle = '#fff';
+  context.fill();
+  context.closePath();
+}
+
+function drawPaddle(leftX, topY, width, height) {
+  context.beginPath();
+  context.rect(leftX, topY, width, height);
+  context.fillStyle = "#fff";
+  context.fill();
+  context.closePath();
+}
+
+function draw() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  drawBall();
+  drawPaddle(leftPaddleX, leftPaddleY, paddleWidth, paddleHeight);
+  drawPaddle(computerPaddleX, computerPaddleY, paddleWidth, paddleHeight);
+  requestAnimationFrame(draw);
+}
+
+draw();
+
 /***/ })
 /******/ ]);
