@@ -99,6 +99,7 @@ function randomDirections() {
 randomDirections();
 document.addEventListener("keydown", keyPressedHandler);
 document.addEventListener("keyup", keyReleasedHandler);
+document.addEventListener("mousemove", mouseMoveHandler);
 
 function keyPressedHandler(e) {
   if (e.keyCode === 38) upPressed = true;else if (e.keyCode === 40) downPressed = true;

@@ -27,6 +27,7 @@ function randomDirections() {
 randomDirections();
 document.addEventListener("keydown", keyPressedHandler);
 document.addEventListener("keyup", keyReleasedHandler);
+  document.addEventListener("mousemove", mouseMoveHandler);
 
 function keyPressedHandler(e) {
   if(e.keyCode === 38) upPressed = true;
@@ -76,6 +77,7 @@ function draw() {
   drawPaddle(playerPaddleX, playerPaddleY, paddleWidth, paddleHeight);
   drawPaddle(computerPaddleX, computerPaddleY, paddleWidth, paddleHeight);
   computeMovement();
+  
 
   if (x + dx < ballRadius) {
     if ((y > playerPaddleY && y < playerPaddleY + paddleHeight) && x < ballRadius + paddleWidth) {
