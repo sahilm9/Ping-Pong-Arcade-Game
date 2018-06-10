@@ -97,6 +97,23 @@ function randomDirections() {
   Math.random() < 0.5 ? dy = -6 : dy = +6;
 };
 randomDirections();
+document.addEventListener("keydown", keyPressedHandler);
+document.addEventListener("keyup", keyReleasedHandler);
+
+function keyPressedHandler(e) {
+  if (e.keyCode === 38) upPressed = true;else if (e.keyCode === 40) downPressed = true;
+}
+
+function keyReleasedHandler(e) {
+  if (e.keyCode === 38) upPressed = false;else if (e.keyCode === 40) downPressed = false;
+}
+function mouseMoveHandler(e) {
+  var relativeX = e.clientX - canvas.offsetLeft;
+  var relativeY = e.clientY;
+  if (relativeX > 0 && relativeX < canvas.width && relativeY > 0 + paddleHeight / 2 && relativeY < canvas.height - paddleHeight / 2) {
+    playerPaddleY = relativeY - paddleHeight / 2;
+  }
+}
 
 function drawBall() {
   context.beginPath();
@@ -152,6 +169,11 @@ function draw() {
 
   if (y + dy < ballRadius || y + dy > canvas.height - ballRadius) {
     dy = -dy;
+  }
+  if (downPressed && playerPaddleY < canvas.height - paddleHeight) {
+    playerPaddleY += 4;
+  } else if (upPressed && playerPaddleY > 0) {
+    playerPaddleY -= 4;
   }
   x += dx;
   y += dy;
