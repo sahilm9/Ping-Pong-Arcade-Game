@@ -100,6 +100,7 @@ randomDirections();
 document.addEventListener("keydown", keyPressedHandler);
 document.addEventListener("keyup", keyReleasedHandler);
 document.addEventListener("mousemove", mouseMoveHandler);
+canvas.addEventListener("click", clickHandler);
 
 function keyPressedHandler(e) {
   if (e.keyCode === 38) upPressed = true;else if (e.keyCode === 40) downPressed = true;
@@ -108,6 +109,13 @@ function keyPressedHandler(e) {
 function keyReleasedHandler(e) {
   if (e.keyCode === 38) upPressed = false;else if (e.keyCode === 40) downPressed = false;
 }
+
+function clickHandler(e) {
+  if (gameOver) {
+    document.location.reload();
+  }
+}
+
 function mouseMoveHandler(e) {
   var relativeX = e.clientX - canvas.offsetLeft;
   var relativeY = e.clientY;
@@ -115,6 +123,7 @@ function mouseMoveHandler(e) {
     playerPaddleY = relativeY - paddleHeight / 2;
   }
 }
+
 function computeMovement() {
   var computerPaddleCenter = computerPaddleY + paddleHeight / 2;
   if (computerPaddleCenter < y - 20) {
@@ -122,6 +131,20 @@ function computeMovement() {
   } else if (computerPaddleCenter > y + 20) {
     computerPaddleY -= 5;
   }
+}
+
+function drawScore() {
+  context.font = "16px Monospace";
+  context.fillStyle = "#fff";
+  context.fillText("Your score: " + playerScore, 50, 100);
+  context.fillText("Computer score: " + computerScore, canvas.width - 225, 100);
+}
+
+function winScreen() {
+  context.font = "16px Monospace";
+  context.fillStyle = "#fff";
+  playerScore === winScore ? context.fillText("You won", 280, 200) : context.fillText("Computer won", 280, 200);
+  context.fillText("Click anywhere in the canvas to restart", 150, 500);
 }
 
 function drawBall() {
@@ -142,10 +165,15 @@ function drawPaddle(playerX, topY, width, height) {
 
 function draw() {
   context.clearRect(0, 0, canvas.width, canvas.height);
+  if (gameOver) {
+    winScreen();
+    return;
+  }
   drawBall();
   drawPaddle(playerPaddleX, playerPaddleY, paddleWidth, paddleHeight);
   drawPaddle(computerPaddleX, computerPaddleY, paddleWidth, paddleHeight);
   computeMovement();
+  drawScore();
 
   if (x + dx < ballRadius) {
     if (y > playerPaddleY && y < playerPaddleY + paddleHeight && x < ballRadius + paddleWidth) {
