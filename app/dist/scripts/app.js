@@ -81,8 +81,8 @@ var canvas = document.getElementById("myCanvas"),
     ballRadius = 10,
     paddleWidth = 10,
     paddleHeight = 100,
-    leftPaddleX = 0,
-    leftPaddleY = canvas.height / 2 - 50,
+    playerPaddleX = 0,
+    playerPaddleY = canvas.height / 2 - 50,
     computerPaddleY = canvas.height / 2 - 50,
     computerPaddleX = canvas.width - paddleWidth,
     upPressed = false,
@@ -92,6 +92,12 @@ var canvas = document.getElementById("myCanvas"),
     computerScore = 0,
     gameOver = false;
 
+function randomDirections() {
+  Math.random() < 0.5 ? dx = +6 : dx = -6;
+  Math.random() < 0.5 ? dy = -6 : dy = +6;
+};
+randomDirections();
+
 function drawBall() {
   context.beginPath();
   context.arc(x, y, ballRadius, 0, Math.PI * 2);
@@ -100,9 +106,9 @@ function drawBall() {
   context.closePath();
 }
 
-function drawPaddle(leftX, topY, width, height) {
+function drawPaddle(playerX, topY, width, height) {
   context.beginPath();
-  context.rect(leftX, topY, width, height);
+  context.rect(playerX, topY, width, height);
   context.fillStyle = "#fff";
   context.fill();
   context.closePath();
@@ -111,8 +117,44 @@ function drawPaddle(leftX, topY, width, height) {
 function draw() {
   context.clearRect(0, 0, canvas.width, canvas.height);
   drawBall();
-  drawPaddle(leftPaddleX, leftPaddleY, paddleWidth, paddleHeight);
+  drawPaddle(playerPaddleX, playerPaddleY, paddleWidth, paddleHeight);
   drawPaddle(computerPaddleX, computerPaddleY, paddleWidth, paddleHeight);
+
+  if (x + dx < ballRadius) {
+    if (y > playerPaddleY && y < playerPaddleY + paddleHeight && x < ballRadius + paddleWidth) {
+      dx = -dx;
+    } else {
+      computerScore++;
+      if (computerScore === winScore) {
+        gameOver = true;
+      } else {
+        x = canvas.width / 2;
+        y = canvas.height / 2;
+        randomDirections();
+        playerPaddleY = canvas.height / 2 - 50;
+      }
+    }
+  } else if (x + dx > canvas.width - ballRadius) {
+    if (y > computerPaddleY && y < computerPaddleY + paddleHeight && x > ballRadius + paddleWidth) {
+      dx = -dx;
+    } else {
+      playerScore++;
+      if (playerScore === winScore) {
+        gameOver = true;
+      } else {
+        x = canvas.width / 2;
+        y = canvas.height / 2;
+        randomDirections();
+        playerPaddleY = canvas.height / 2 - 50;
+      }
+    }
+  }
+
+  if (y + dy < ballRadius || y + dy > canvas.height - ballRadius) {
+    dy = -dy;
+  }
+  x += dx;
+  y += dy;
   requestAnimationFrame(draw);
 }
 
