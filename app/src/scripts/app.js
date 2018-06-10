@@ -45,6 +45,14 @@ function mouseMoveHandler(e) {
     playerPaddleY = relativeY - paddleHeight/2;
   }
 }
+function computeMovement(){
+    let computerPaddleCenter = computerPaddleY + paddleHeight/2;
+    if(computerPaddleCenter < y-20){
+      computerPaddleY += 5;
+    }else if (computerPaddleCenter >y+20){
+      computerPaddleY -= 5;
+    }
+}
 
 function drawBall() {
   context.beginPath();
@@ -67,6 +75,7 @@ function draw() {
   drawBall();
   drawPaddle(playerPaddleX, playerPaddleY, paddleWidth, paddleHeight);
   drawPaddle(computerPaddleX, computerPaddleY, paddleWidth, paddleHeight);
+  computeMovement();
 
   if (x + dx < ballRadius) {
     if ((y > playerPaddleY && y < playerPaddleY + paddleHeight) && x < ballRadius + paddleWidth) {
